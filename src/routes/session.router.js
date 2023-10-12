@@ -5,6 +5,7 @@ import { passportCall } from "../util/authUtil.js";
 const router = Router();
 
 router.get("/current", passportCall("jwt"), (req, res) => {
+  console.log(req.user);
   res.status(200).send({
     status: "ok",
     payload: req.user,

@@ -1,7 +1,9 @@
 import passport from "passport";
+import jwt from "jsonwebtoken";
 
+// Autenticación con passport
 export const passportCall = (strategy) => {
-  console.log("strategy", strategy);
+  console.log(strategy);
   return async (req, res, next) => {
     passport.authenticate(strategy, function (err, user, info) {
       if (err) return next(err);
@@ -15,4 +17,22 @@ export const passportCall = (strategy) => {
       next();
     })(req, res, next);
   };
+};
+
+export const auth = (req, res, next) => {
+  const authHeader = req.headers.authorization ?? req.cookies.token;
+  if (!authHeader) {
+    return res.status(401).redirect("/login?requiredLogin=true");
+  }
+
+  const token = authHeader.split(" ")[1] ?? authHeader; //Remove "Bearer"
+  console.log(token);
+  jwt.verify(token, process.env.JWT_SECRET, (error, credentiales) => {
+    if (error) {
+      return res.status(403).redirect("/login?failedLogin=true");
+    }
+    req.user = credentiales;
+    console.log(req.user);
+    next();
+  });
 };

@@ -47,7 +47,7 @@ class cartDBService {
       throw new Error("Error al agregar el producto al carrito");
     }
   }
-  async deleteCartById(id) {
+  async emptyCart(id) {
     try {
       let response = await cartModel.updateOne(
         { _id: id },

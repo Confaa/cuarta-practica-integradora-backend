@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import { createHash } from "../util/cryptoUtil.js";
+
 const userCollection = "users";
+
+// Schema de los usuarios
 const userSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
@@ -11,9 +14,11 @@ const userSchema = new mongoose.Schema({
   role: { type: String, required: true, default: "user" },
 });
 
+// Populates del carrito del usuario
 userSchema.pre("save", function () {
   this.password = createHash(this.password);
 });
+
 userSchema.pre("findOne", function () {
   this.populate("cart");
 });

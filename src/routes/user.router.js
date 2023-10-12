@@ -5,7 +5,7 @@ import { compareHash } from "../util/cryptoUtil.js";
 
 const router = Router();
 
-router.get("/",async (req, res) => {
+router.get("/", async (req, res) => {
   res.send("Hola mundo");
 });
 router.post("/register", async (req, res) => {
@@ -44,13 +44,12 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(user, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 1000,
-    }).send({
-      status: "User logged in successfully",
-      token,
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000,
+      })
+      .redirect("/products");
   } catch (error) {
     res.status(500).send({
       status: "Error while logging in user",

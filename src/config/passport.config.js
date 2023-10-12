@@ -4,6 +4,7 @@ import jwt, { ExtractJwt } from "passport-jwt";
 
 const JWTStrategy = jwt.Strategy;
 
+// Configuración de passport
 const initPassport = () => {
   passport.use(
     "jwt",
@@ -23,6 +24,7 @@ const initPassport = () => {
   );
 };
 
+// Función para extraer el token de las cookies
 const cookieExtractor = (req) => {
   let token = null;
   if (req && req.cookies) {

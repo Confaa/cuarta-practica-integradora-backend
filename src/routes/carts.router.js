@@ -1,9 +1,13 @@
 import { Router } from "express";
 import mongoose from "mongoose";
-const router = Router();
 import CartDBService from "../services/CartDBService.js";
 
+/*
+ * Manejo de las rutas de la API de carritos
+ * */
 const CartService = new CartDBService();
+const router = Router();
+// Pide todos los carritos a la base de datos
 router.get("/", async (req, res) => {
   try {
     let carts = await CartService.getCarts();
@@ -21,6 +25,8 @@ router.get("/", async (req, res) => {
   }
   res.send("carrito");
 });
+
+// Pide un carrito por id a la base de datos
 router.get("/:cid", async (req, res) => {
   try {
     let cid = req.params.cid;
@@ -43,6 +49,7 @@ router.get("/:cid", async (req, res) => {
   }
 });
 
+// Crea un carrito en la base de datos
 router.post("/", async (req, res) => {
   try {
     console.log(req.body);
@@ -61,6 +68,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Agrega un producto al carrito
 router.post("/:cid/products/:pid", async (req, res) => {
   try {
     let cid = req.params.cid;
@@ -83,6 +91,7 @@ router.post("/:cid/products/:pid", async (req, res) => {
   }
 });
 
+// Elimina un producto del carrito
 router.delete("/:cid/products/:pid", async (req, res) => {
   try {
     let cid = req.params.cid;
@@ -101,6 +110,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
   }
 });
 
+// Actualiza un carrito por id de la base de datos
 router.put("/:cid", async (req, res) => {
   try {
     let cid = req.params.cid;
@@ -117,6 +127,7 @@ router.put("/:cid", async (req, res) => {
     console.log(error);
   }
 });
+// Actualiza un producto del carrito por id de la base de datos
 router.put("/:cid/products/:pid", async (req, res) => {
   try {
     let cid = req.params.cid;
@@ -139,11 +150,12 @@ router.put("/:cid/products/:pid", async (req, res) => {
   }
 });
 
+// Elimina un carrito por id de la base de datos
 router.delete("/:cid", async (req, res) => {
   try {
     let cid = req.params.cid;
     if (mongoose.Types.ObjectId.isValid(cid)) {
-      let response = await CartService.deleteCartById(cid);
+      let response = await CartService.emptyCart(cid);
       res.status(200).send({
         status: "success",
         payload: response,

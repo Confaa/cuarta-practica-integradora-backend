@@ -2,11 +2,17 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import ProductDBService from "../services/ProductDBService.js";
 import { productModel } from "../models/product.model.js";
-import {passportCall} from "../util/authUtil.js";
+import { passportCall } from "../util/authUtil.js";
+
+/*
+ * Manejo de las rutas de la API de productos
+ */
 
 const router = Router();
 const ProductService = new ProductDBService();
-router.get("/", passportCall('jwt'),async (req, res) => {
+
+// Pide todos los productos a la base de datos
+router.get("/", passportCall("jwt"), async (req, res) => {
   try {
     let { limit, page, category, status, sort } = req.query;
     if (!limit) {
@@ -63,6 +69,7 @@ router.get("/", passportCall('jwt'),async (req, res) => {
   }
 });
 
+// Pide un producto por id a la base de datos
 router.get("/:pid", async (req, res) => {
   let pid = req.params.pid;
   try {
@@ -85,6 +92,7 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
+// Crea un producto en la base de datos
 router.post("/", async (req, res) => {
   try {
     let response = await ProductService.addProduct(
@@ -110,15 +118,11 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Actualiza un producto por id en la base de datos
 router.put("/:pid", async (req, res) => {
   try {
     let pid = req.params.pid;
     if (mongoose.Types.ObjectId.isValid(pid)) {
-      let resp = await productModel.find({ _id: pid });
-      if (resp.length === 0) {
-        throw new Error("El producto no existe");
-      }
-      console.log(req.body);
       let response = await ProductService.updateProductById(pid, req.body);
       res.status(200).send({
         status: "success",
@@ -137,6 +141,7 @@ router.put("/:pid", async (req, res) => {
   }
 });
 
+// Elimina un producto por id en la base de datos
 router.delete("/:pid", async (req, res) => {
   try {
     let pid = req.params.pid;

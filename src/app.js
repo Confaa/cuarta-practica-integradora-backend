@@ -27,12 +27,12 @@ app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 
-try{
+try {
   const db = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB}`;
   await mongoose.connect(db);
   console.log("Database connected");
-}catch (error){
-    console.log(error);
+} catch (error) {
+  console.log(error);
 }
 
 app.use("/", userViewRouter);
