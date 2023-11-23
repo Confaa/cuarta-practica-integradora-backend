@@ -1,9 +1,9 @@
 import passport from "passport";
 import jwt from "jsonwebtoken";
+import UserCurrentDTO from "../dao/dto/userCurrent.dto.js";
 
 // Autenticación con passport
 export const passportCall = (strategy) => {
-  console.log(strategy);
   return async (req, res, next) => {
     passport.authenticate(strategy, function (err, user, info) {
       if (err) return next(err);
@@ -12,8 +12,7 @@ export const passportCall = (strategy) => {
           error: info.messages ? info.messages : info.toString(),
         });
       }
-
-      req.user = user;
+      req.user = new UserCurrentDTO(user);
       next();
     })(req, res, next);
   };
@@ -24,15 +23,13 @@ export const auth = (req, res, next) => {
   if (!authHeader) {
     return res.status(401).redirect("/login?requiredLogin=true");
   }
-
   const token = authHeader.split(" ")[1] ?? authHeader; //Remove "Bearer"
-  console.log(token);
   jwt.verify(token, process.env.JWT_SECRET, (error, credentiales) => {
     if (error) {
       return res.status(403).redirect("/login?failedLogin=true");
     }
     req.user = credentiales;
-    console.log(req.user);
+    req.logger.info("Usuario autenticado");
     next();
   });
 };

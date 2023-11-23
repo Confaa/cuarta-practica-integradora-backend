@@ -1,7 +1,7 @@
 <div class="products">
   <div class="data-user">
     {{#if user}}
-      <h1>Bienvenido {{user.first_name}} {{user.last_name}}</h1>
+      <h1>Bienvenido {{user.full_name}}</h1>
       <p>Email: {{user.email}}</p>
       <p>Edad: {{user.age}}</p>
       <a href="/api/sessions/logout">Cerrar sesion</a>
@@ -16,7 +16,7 @@
       <a href="/login">Iniciar sesion</a>
       <a href="/register">Registrarse</a>
     {{/if}}
-
+    <a id="cart-id" href="/carts">Carrito</a>
   </div>
   <span class="products__list">
     {{#each products}}

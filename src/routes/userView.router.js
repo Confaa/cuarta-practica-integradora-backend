@@ -4,7 +4,7 @@ import { auth } from "../util/authUtil.js";
 
 const router = Router();
 
-router.get("/login", auth, async (req, res) => {
+router.get("/login", async (req, res) => {
   if (req.user) {
     return res.redirect("/products");
   }
@@ -16,7 +16,7 @@ router.get("/login", auth, async (req, res) => {
   });
 });
 
-router.get("/register", auth, async (req, res) => {
+router.get("/register", async (req, res) => {
   if (req.user) {
     return res.redirect("/products");
   }

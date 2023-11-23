@@ -1,19 +1,18 @@
 import { Router } from "express";
-import jwt from "jsonwebtoken";
 
 /*
  * Manejo de las rutas de la API de views de productos
  */
 
-import ProductDBService from "../services/ProductDBService.js";
+import ProductDao from "../dao/mongo/classes/product.dao.js";
 import { auth } from "../util/authUtil.js";
+import { productService } from "../dao/repositories/index.js";
 const router = Router();
 
 // Pide todos los productos a la base de datos
 router.get("/", auth, async (req, res) => {
   try {
-    const productDBService = new ProductDBService();
-    const response = await productDBService.getAllProducts();
+    const response = await productService.getProducts();
     let products;
     if (response.length === 0) {
       products = [];
@@ -36,7 +35,6 @@ router.get("/", auth, async (req, res) => {
         };
       });
     }
-    console.log(products);
     res.render("products", {
       user: req.user,
       rol: req.user.role === "admin",

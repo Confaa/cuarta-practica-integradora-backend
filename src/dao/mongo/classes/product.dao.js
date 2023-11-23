@@ -2,71 +2,64 @@ import { productModel } from "../models/product.model.js";
 /*
  * Manejo de la base de datos de productos
  * */
-class ProductDBService {
-  async addProduct(
-    title,
-    description,
-    price,
-    thumbnail,
-    code,
-    stock,
-    category,
-  ) {
-    const product = {
-      title: title,
-      description: description,
-      price: price,
-      thumbnail: thumbnail,
-      code: code,
-      stock: stock,
-      status: true,
-      category: category,
-    };
-    console.log(product);
+class Product {
+  add = async (product) => {
     try {
-      let result = await productModel.find({ code: product.code });
-      console.log(result);
-      if (result.length > 0) {
-        throw new Error("El producto ya existe");
+      let exist = await productModel.find({ code: product.code });
+      if (exist.length > 0) {
+        return null;
       }
       return await productModel.create(product);
     } catch (error) {
-      throw new Error("Error al crear el producto");
+      console.log(error);
+      return null;
     }
-  }
+  };
   // Pide todos los productos a la base de datos
-  async getAllProducts() {
+  get = async () => {
     try {
-      const products = await productModel.find();
-      return products;
-    } catch (error) {
-      throw new Error("Error al obtener los productos");
-    }
-  }
-  // Pide un producto por id a la base de datos
-  async getProductById(id) {
-    try {
-      let product = await productModel.findById({ _id: id });
-      return product;
-    } catch (error) {
-      throw new Error("Error al obtener el producto");
-    }
-  }
-  // Elimina un producto por id de la base de datos
-  async deleteProductById(id) {
-    try {
-      let result = await productModel.deleteOne({ _id: id });
+      const result = await productModel.find();
+      if (result.length === 0) {
+        return null;
+      }
       return result;
     } catch (error) {
-      throw new Error("Error al eliminar el producto");
+      console.log(error);
+      return null;
     }
-  }
-  // Actualiza un producto por id de la base de datos
-  async updateProductById(id, product) {
+  };
+  // Pide un producto por id a la base de datos
+  getById = async (id) => {
     try {
-      let resp = await productModel.find({ _id: id });
-      if (resp.length === 0) {
-        throw new Error("El producto no existe");
+      let result = await productModel.findById({ _id: id });
+      if (!result) {
+        return null;
+      }
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+  // Elimina un producto por id de la base de datos
+  deleteById = async (id) => {
+    try {
+      let result = await productModel.deleteOne({ _id: id });
+      if (result.deletedCount === 0) {
+        return null;
+      }
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+  // Actualiza un producto por id de la base de datos
+  updateById = async (id, product) => {
+    try {
+      let exist = await productModel.find({ _id: id });
+      if (exist.length === 0) {
+        return null;
       } else {
         return await productModel.updateOne(
           { _id: id },
@@ -84,11 +77,12 @@ class ProductDBService {
         );
       }
     } catch (error) {
-      throw new Error("Error al actualizar el producto");
+      console.log(error);
+      return null;
     }
-  }
+  };
   // Pide los productos con filtros a la base de datos
-  async getProductsWithParams(limit, page, filter, sort) {
+  getWithParams = async (limit, page, filter, sort) => {
     try {
       if (!sort) {
         return await productModel.paginate(filter, {
@@ -97,7 +91,7 @@ class ProductDBService {
         });
       } else {
         if (sort !== "asc" && sort !== "desc") {
-          throw new Error("El parametro sort debe ser asc o desc");
+          return null;
         }
         return await productModel.paginate(filter, {
           limit: limit,
@@ -106,8 +100,9 @@ class ProductDBService {
         });
       }
     } catch (error) {
-      throw new Error("Error al obtener los productos");
+      console.log(error);
+      return null;
     }
-  }
+  };
 }
-export default ProductDBService;
+export default Product;

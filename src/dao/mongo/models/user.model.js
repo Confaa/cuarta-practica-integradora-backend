@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { createHash } from "../util/cryptoUtil.js";
+import { createHash } from "../../../util/cryptoUtil.js";
 
 const userCollection = "users";
 
@@ -11,7 +11,12 @@ const userSchema = new mongoose.Schema({
   age: { type: Number, required: true },
   password: { type: String, required: true },
   cart: { type: mongoose.Schema.Types.ObjectId, ref: "carts" },
-  role: { type: String, required: true, default: "user" },
+  role: {
+    type: String,
+    required: true,
+    default: "user",
+    enum: ["user", "admin", "premium"],
+  },
 });
 
 // Populates del carrito del usuario
