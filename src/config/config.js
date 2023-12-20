@@ -3,13 +3,13 @@ import { Command } from "commander";
 
 const program = new Command();
 
-program.requiredOption("--mode <mode>", "Mode App", "development");
+program.requiredOption("--mode <mode>", "Mode App", "dev");
 program.parse();
 
 const env = program.opts().mode;
 
 dotenv.config({
-  path: env === "production" ? "./.env.prod" : "./.env.dev",
+  path: env === "prod" ? "./.env.prod" : "./.env.dev",
 });
 
 export default {

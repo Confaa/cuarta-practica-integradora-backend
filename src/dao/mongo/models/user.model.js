@@ -3,6 +3,18 @@ import { createHash } from "../../../util/cryptoUtil.js";
 
 const userCollection = "users";
 
+// Schema de los documentos
+const itemDocumentSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  reference: {
+    type: String,
+    required: true,
+  },
+});
+
 // Schema de los usuarios
 const userSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
@@ -24,16 +36,6 @@ const userSchema = new mongoose.Schema({
   last_connection: { type: Date, required: true, default: Date.now },
 });
 
-const itemDocumentSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  reference: {
-    type: String,
-    required: true,
-  },
-});
 // Populates del carrito del usuario
 userSchema.pre("save", function () {
   this.password = createHash(this.password);

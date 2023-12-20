@@ -19,6 +19,8 @@ import { addLogger } from "./util/logger/custom.logger.js";
 import recoveryRouter from "./routes/recovery.router.js";
 import recoveryViewRouter from "./routes/recoveryView.router.js";
 import permisionsRouter from "./routes/permisions.router.js";
+import specs from "./config/swagger.config.js";
+import swaggerUiExpress from "swagger-ui-express";
 
 const app = express();
 
@@ -29,6 +31,10 @@ app.use(cookieParser());
 app.use(addLogger);
 initPassport();
 app.use(passport.initialize());
+
+// Docs
+
+app.use("/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
