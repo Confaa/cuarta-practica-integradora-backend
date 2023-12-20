@@ -45,7 +45,7 @@ try {
 app.use("/", userViewRouter);
 app.use("/", mockingRouter);
 app.use("/", loggerRouter);
-app.use("/api/sessions", userRouter);
+app.use("/api/users", userRouter);
 app.use("/api/sessions", sessionRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);

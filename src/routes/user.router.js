@@ -14,4 +14,5 @@ router.get("/", async (req, res) => {
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);
+router.post("/upload-files", uploadFiles)
 export default router;

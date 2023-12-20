@@ -17,8 +17,23 @@ const userSchema = new mongoose.Schema({
     default: "user",
     enum: ["user", "admin", "premium"],
   },
+  documents: {
+    type: [itemDocumentSchema],
+    required: true,
+  },
+  last_connection: { type: Date, required: true, default: Date.now },
 });
 
+const itemDocumentSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  reference: {
+    type: String,
+    required: true,
+  },
+});
 // Populates del carrito del usuario
 userSchema.pre("save", function () {
   this.password = createHash(this.password);
